@@ -40,6 +40,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	b, err = os.ReadFile(config.PublicSigningKeyFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	publicSigningKey := string(b)
+
 	githubAPIToken, ok := os.LookupEnv("GITHUB_API_TOKEN")
 	if !ok || githubAPIToken == "" {
 		log.Fatal("GITHUB_API_TOKEN environment variable must be set and non-empty")
@@ -81,7 +87,7 @@ func main() {
 			}
 
 			if !config.UnsafeSkipSignatureVerification {
-				ok, err := verifySignature(config.PublicSigningKey, tarGzBytes, sigBytes)
+				ok, err := verifySignature(publicSigningKey, tarGzBytes, sigBytes)
 				if !ok {
 					log.Printf("%s: update failed: %v", target.Name, err)
 					continue

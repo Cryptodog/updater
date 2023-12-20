@@ -8,7 +8,7 @@ import (
 type Config struct {
 	DeployDir                       string    `json:"deploy_dir"`
 	Targets                         []*Target `json:"targets"`
-	PublicSigningKey                string    `json:"public_signing_key"`
+	PublicSigningKeyFile            string    `json:"public_signing_key_file"`
 	UnsafeSkipSignatureVerification bool      `json:"unsafe_skip_signature_verification"`
 	UpdateInterval                  int       `json:"update_interval"`
 }
@@ -26,8 +26,8 @@ func (c *Config) Validate() error {
 	if c.UpdateInterval <= 0 {
 		return fmt.Errorf("update interval must be >0")
 	}
-	if !c.UnsafeSkipSignatureVerification && c.PublicSigningKey == "" {
-		return fmt.Errorf("public signing key must be set if signature verification is enabled")
+	if !c.UnsafeSkipSignatureVerification && c.PublicSigningKeyFile == "" {
+		return fmt.Errorf("public signing key file must be set if signature verification is enabled")
 	}
 	if len(c.Targets) == 0 {
 		return fmt.Errorf("at least one target must be set")
