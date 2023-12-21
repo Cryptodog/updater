@@ -117,6 +117,7 @@ func getReleaseSymlink(deployDir, targetName string) string {
 
 func getLastReleaseID(deployDir, targetName string) (string, error) {
 	lastReleaseSymlink := getReleaseSymlink(deployDir, targetName)
+	// make sure it's a symlink
 	fi, err := os.Lstat(lastReleaseSymlink)
 	if err != nil {
 		return "", err
@@ -129,6 +130,13 @@ func getLastReleaseID(deployDir, targetName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// don't want to continue if the linked release directory isn't actually there
+	_, err = os.Stat(lastReleaseDir)
+	if err != nil {
+		return "", err
+	}
+
+	// get ID from directory name
 	split := strings.Split(filepath.Base(lastReleaseDir), "-")
 	if len(split) != 2 {
 		return "", fmt.Errorf("invalid last release directory name: %s", lastReleaseDir)
