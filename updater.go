@@ -150,8 +150,8 @@ func downloadReleaseAssets(target *Target, release *github.RepositoryRelease) (t
 		return
 	}
 
-	const tarGzRegexFmt = `^%s-[\w.]+\.tar\.gz$`
-	const sigRegexFmt = `^%s-[\w.]+\.minisig$`
+	const tarGzRegexFmt = `^%s-[\w.-]+\.tar\.gz$`
+	const sigRegexFmt = `^%s-[\w.-]+\.minisig$`
 	tarGzRegex := regexp.MustCompile(fmt.Sprintf(tarGzRegexFmt, target.Repo))
 	sigRegex := regexp.MustCompile(fmt.Sprintf(sigRegexFmt, target.Repo))
 
